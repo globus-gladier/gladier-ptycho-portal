@@ -1,0 +1,22 @@
+{%extends "globus-portal-framework/v2/search-about.html"%}
+
+{% block landing_page_about %}
+  <p class="lead font-weight-bolder">
+    Ptychography is a computational imaging technique. A detector records an extensive data set consisting 
+    of many inference patterns obtained as an object is displaced to various positions relative to an 
+    illumination field. A computer algorithm of some type is then used to invert these data into an image.
+  </p>
+{% endblock %}
+
+{% block landing_page_data_access %}
+  <p class="lead font-weight-bolder">Search results are limited to members of the XPCS Analysis Developers Group.</p>
+  {% if '13e5512f-e761-11ec-8a9e-ff9dc0f99d56' in user_groups %}
+  <a class="btn btn-success" target="_blank" href="https://app.globus.org/groups/13e5512f-e761-11ec-8a9e-ff9dc0f99d56/about">
+    You are a member of the Ptychography Group
+  </a>
+  {% else %}
+  <a class="btn btn-primary" target="_blank" href="https://app.globus.org/groups/13e5512f-e761-11ec-8a9e-ff9dc0f99d56/about">
+    Request Access to the Ptychography Group
+  </a>
+  {% endif %}
+{% endblock %}
