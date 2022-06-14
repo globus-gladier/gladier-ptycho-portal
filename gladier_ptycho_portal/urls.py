@@ -20,6 +20,7 @@ from globus_portal_framework.urls import register_custom_index
 from gladier_ptycho_portal.views import (
     GlobusPilotSearchView,
 )
+from gladier_ptycho_portal.api import get_access_token
 
 
 
@@ -27,13 +28,21 @@ app_name = 'gladier-ptychography-portal'
 register_custom_index('ptychography_index', ['ptycho'])
 
 
+apipatterns = [
+    path('access_token', get_access_token, name='access-token'),
+]
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('<ptychography_index:index>/', GlobusPilotSearchView.as_view(), name='search'),
+    path('', include(apipatterns)),
+]
+
+base_dgpf = [
+    path('', include('social_django.urls', namespace='social')),
+    path('', include('globus_portal_framework.urls')),
 ]
 
 if 'ALCF' not in settings.PROJECT_TITLE:
-    urlpatterns += [
-        path('', include('social_django.urls', namespace='social')),
-        path('', include('globus_portal_framework.urls')),
-    ]
+    urlpatterns.extend(base_dgpf)

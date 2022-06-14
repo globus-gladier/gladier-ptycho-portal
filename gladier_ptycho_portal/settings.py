@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import globus_sdk
 from gladier_ptycho_portal.apps import SEARCH_INDEXES
+
+SEARCH_INDEXES = SEARCH_INDEXES
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,6 +32,17 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SOCIAL_AUTH_GLOBUS_SCOPE = [
+    globus_sdk.SearchClient.scopes.all,
+    f'https://auth.globus.org/scopes/{SEARCH_INDEXES["ptycho"]["collection"]}/https'
+    # 'urn:globus:auth:scope:search.api.globus.org:all',
+    # Note: Automate scopes are only added if the globus-automate-client is installed
+]
+
+ALLOWED_FRONTEND_TOKENS = [
+    SEARCH_INDEXES["ptycho"]["collection"],
+]
+
 
 # Application definition
 
@@ -44,6 +58,7 @@ INSTALLED_APPS = [
     # This contains general Globus portal tools
     'globus_portal_framework',
     'social_django',
+    'gladier_ptycho_portal',
 ]
 
 MIDDLEWARE = [
@@ -70,7 +85,10 @@ ROOT_URLCONF = 'gladier_ptycho_portal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            BASE_DIR / 'alcf_data_portal' / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -100,25 +118,21 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'stream': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    'loggers': {
+        'django': {'handlers': ['stream'], 'level': 'INFO'},
+        'django.db.backends': {'handlers': ['stream'], 'level': 'WARNING'},
+        'globus_portal_framework': {'handlers': ['stream'], 'level': 'DEBUG'},
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -143,3 +157,8 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+try:
+    from .local_settings import *
+except ImportError:
+    print('Failed to load local settings! Users will not be able to login!')

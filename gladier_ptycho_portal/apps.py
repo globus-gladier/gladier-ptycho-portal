@@ -16,7 +16,8 @@ SEARCH_INDEXES = {
             # 'ncipilot',
             # ('https_url', fields.https_url),
             # ('copy_to_clipboard_link', fields.https_url),
-            ('resource_server', lambda r: 'petrel_https_server')
+            ('all_preview', fields.fetch_all_previews),
+            ('resource_server', lambda r: '80150e2e-5e88-4d35-b3cd-170b25b60538')
         ],
         'facets': [
             {
@@ -43,6 +44,7 @@ SEARCH_INDEXES = {
             'field_name': 'project_metadata.project-slug',
             'values': ['ptychography']
         }],
+        'collection': '80150e2e-5e88-4d35-b3cd-170b25b60538',
         'base_templates': 'globus-portal-framework/v2/',
         'filter_match': 'match-all',
         'template_override_dir': 'ptychography',

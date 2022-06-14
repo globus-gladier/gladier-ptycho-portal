@@ -1,6 +1,7 @@
 import logging
 from django.contrib.auth.mixins import LoginRequiredMixin
 from globus_portal_framework.views.generic import SearchView
+from globus_portal_framework.gclients import load_search_client
 
 log = logging.getLogger(__name__)
 
