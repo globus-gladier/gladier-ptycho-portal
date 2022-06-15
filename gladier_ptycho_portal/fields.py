@@ -1,7 +1,9 @@
 import os
+import logging
 from datetime import datetime
 from urllib.parse import urlsplit, urlencode, urlunsplit
 
+log = logging.getLogger(__name__)
 
 def title(record):
     return record[0]['dc']['titles'][0]['title']
@@ -21,14 +23,25 @@ def remote_file_manifest(result):
     return result[0].get('files')
 
 
+def parse_date(result):
+    if not result:
+        return None
+    try:
+        field = result[0]['dc']['dates'][0]['date']
+        return datetime.strptime(field, '%Y-%m-%dT%H:%M:%S%fZ'),
+    except KeyError:
+        # No date returned
+        pass
+    except ValueError:
+        log.error(f'Invalid Date format {field} for subject.')
+
+
+
 def search_results(result):
     return [
         {'field': 'creator', 'name': 'Creator',
          'value': result[0]['dc']['creators'][0]['creatorName']},
-        # {'field': 'acquisitionDate', 'name': 'Acquisition Date',
-        #  'value': datetime.strptime(result[0]['dc']['dates'][0]['date'],
-        #                             '%Y-%m-%dT%H:%M:%S'),
-        #  'type': 'date'},
+        {'field': 'acquisitionDate', 'name': 'Acquisition Date', 'value': parse_date(result), 'type': 'date'},
     ]
 
 
@@ -42,8 +55,6 @@ def get_https_url(rfm_url):
     purl = urlsplit(rfm_url)
     rurl = urlunsplit(['https', 'g-4bbfe.fd635.8443.data.globus.org', purl.path, '', ''])
     return rurl
-
-
 
 
 def fetch_all_previews(result):
