@@ -29,7 +29,11 @@
             </tr>
             <tr>
                 {% for field in result.search_results %}
+                {% if field.type == 'date' %}
+                <td>{{field.value|date}}</td>
+                {% else %}
                 <td>{{field.value}}</td>
+                {% endif %}
                 {% endfor %}    
             </tr>
         </tbody>

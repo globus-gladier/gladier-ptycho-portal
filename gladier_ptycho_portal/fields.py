@@ -30,7 +30,7 @@ def parse_date(result):
         return None
     try:
         field = result[0]['dc']['dates'][0]['date']
-        return datetime.strptime(field, '%Y-%m-%dT%H:%M:%S%fZ'),
+        return datetime.strptime(field, '%Y-%m-%dT%H:%M:%S.%fZ')
     except KeyError:
         # No date returned
         pass
