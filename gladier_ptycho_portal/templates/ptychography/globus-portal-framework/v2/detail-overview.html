@@ -42,7 +42,9 @@
       file_record['loaded'] = true;
     }
   }
-  loadInitialImages();
+  $( document ).ready(function() {
+    loadInitialImages();
+  });
 </script>
 <style>
 @media print {
@@ -70,7 +72,7 @@
 
 <div class="row">
 
-  {% for image_data in all_preview %}
+  {% for image_data in image_preview %}
   <div class="col-md-6">
     <div class="card mt-3 text-center" style="">
       <div id="preview-content-{{image_data.id}}"></div>
@@ -123,4 +125,19 @@
 </div>
 
 </div>
+
+{% for text in text_outputs %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card mt-3">
+      <div class="card-body">
+        <div id="preview-content-{{text.id}}"></div>
+      </div>
+      <div class="card-footer">
+        <p class="card-text">{{text.filename}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}

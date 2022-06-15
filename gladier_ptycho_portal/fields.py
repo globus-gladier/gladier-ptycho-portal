@@ -4,6 +4,8 @@ from datetime import datetime
 from urllib.parse import urlsplit, urlencode, urlunsplit
 
 log = logging.getLogger(__name__)
+MIME_TEXT = 'text/plain'
+MIME_JPEG = 'image/jpeg'
 
 def title(record):
     return record[0]['dc']['titles'][0]['title']
@@ -57,6 +59,14 @@ def get_https_url(rfm_url):
     return rurl
 
 
+def image_preview(result):
+    return [p for p in fetch_all_previews(result) if p['mime_type'] in [MIME_JPEG]]
+
+
+def text_outputs(result):
+    return [p for p in fetch_all_previews(result) if p['mime_type'] in [MIME_TEXT]]
+
+
 def fetch_all_previews(result):
     # Gather base previews from the remote file manifest
     base_previews = {
@@ -67,7 +77,7 @@ def fetch_all_previews(result):
             'filename': entry['filename'],
             'mime_type': entry['mime_type']
         } for entry in result[0].get('files', {})
-        if entry['mime_type'] in ['image/jpeg']
+        if entry['mime_type'] in [MIME_JPEG, MIME_TEXT]
     }    
     
     # If the user provided 'preview' info, overwrite the manifest entry with
@@ -80,4 +90,4 @@ def fetch_all_previews(result):
     previews = list(base_previews.values())
     for idx, preview in enumerate(previews):
         preview['id'] = idx
-    return sorted(previews, key=lambda p: p['url'], reverse=False)
+    return sorted(previews, key=lambda p: p['filename'], reverse=False)

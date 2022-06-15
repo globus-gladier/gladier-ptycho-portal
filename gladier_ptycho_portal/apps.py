@@ -17,6 +17,8 @@ SEARCH_INDEXES = {
             # ('https_url', fields.https_url),
             # ('copy_to_clipboard_link', fields.https_url),
             ('all_preview', fields.fetch_all_previews),
+            ('image_preview', fields.image_preview),
+            ('text_outputs', fields.text_outputs),
             ('resource_server', lambda r: '80150e2e-5e88-4d35-b3cd-170b25b60538')
         ],
         'facets': [
