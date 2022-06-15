@@ -26,7 +26,7 @@
 
   async function loadInitialImages() {
     try {
-      accessToken = await getAccessToken("{% url 'access-token' %}", "{{resource_server}}")
+      accessToken = await getAccessToken("{% url 'gladier-ptychography-portal:access-token' %}", "{{resource_server}}")
     } catch (error) {console.error('Fetching access token failed!')}
 
     for (var i = 0; i < rfmFiles.length; i++)  {
