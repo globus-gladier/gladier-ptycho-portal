@@ -25,10 +25,6 @@ SEARCH_INDEXES = {
         ],
         'facets': [
             {
-                'name': 'Creator',
-                'field_name': 'dc.creators.creatorName',
-            },
-            {
                 'name': 'Dates',
                 'field_name': 'dc.dates.date',
                 'type': 'date_histogram',

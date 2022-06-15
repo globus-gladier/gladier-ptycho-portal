@@ -22,7 +22,7 @@ def globus_app_link(result):
 
 
 def remote_file_manifest(result):
-    return result[0].get('files')
+    return result[0].get('files', [])
 
 
 def parse_date(result):
@@ -41,9 +41,9 @@ def parse_date(result):
 
 def search_results(result):
     return [
-        {'field': 'creator', 'name': 'Creator',
-         'value': result[0]['dc']['creators'][0]['creatorName']},
         {'field': 'acquisitionDate', 'name': 'Acquisition Date', 'value': parse_date(result), 'type': 'date'},
+        {'field': 'num_h5_files', 'name': 'H5 Files',
+         'value': len([f for f in remote_file_manifest(result) if f['url'].endswith('.h5')])}
     ]
 
 
