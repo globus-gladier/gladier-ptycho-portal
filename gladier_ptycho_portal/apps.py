@@ -4,6 +4,8 @@ SEARCH_INDEXES = {
     'ptycho': {
         'name': 'APS Ptychography',
         'uuid': '93e343cc-b555-4d60-9aab-80ff191a8abb',
+        'description': 'A computational method of microscopic imaging by processing many coherent interference patterns',
+        'access': 'private',
         'fields': [
             ('title', fields.title),
             # ('truncated_description', fields.get_truncated_description),
